@@ -1,4 +1,5 @@
 ﻿using backend_tareas.Context;
+using backend_tareas.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
@@ -30,6 +31,23 @@ namespace backend_tareas.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpPost]
+        public async Task<IActionResult> Post([FromBody]Tarea tarea)
+        {
+            try
+            {
+                _context.Tareas.Add(tarea);
+                await _context.SaveChangesAsync();
+                return Ok(new { message = "La tarea fue registrada con exito!" });
+            }
+            catch (System.Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+        }
+
 
         //public IActionResult Index()
         //{
