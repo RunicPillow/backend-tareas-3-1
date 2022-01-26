@@ -49,7 +49,7 @@ namespace backend_tareas.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult>  Put(int id, [FromBody] Tarea tarea)
+        public async Task<IActionResult> Put(int id, [FromBody] Tarea tarea)
         {
             try
             {
@@ -62,6 +62,28 @@ namespace backend_tareas.Controllers
                 _context.Entry(tarea).State = EntityState.Modified;
                 await _context.SaveChangesAsync();
                 return Ok(new { message = "La tarea fue actualizada con exito!" });
+
+            }
+            catch (System.Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            try
+            {
+                var tarea = await _context.Tareas.FindAsync(id);
+                if(tarea == null)
+                {
+                    return NotFound();
+                }
+
+                _context.Tareas.Remove(tarea);
+                await _context.SaveChangesAsync();
+                return Ok(new { message = "Tarea eliminada con exito!" });
 
             }
             catch (System.Exception ex)
